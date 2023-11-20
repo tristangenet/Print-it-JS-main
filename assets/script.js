@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var banner = document.getElementById('banner');
     var arrowLeft = document.querySelector('.arrow_left');
     var arrowRight = document.querySelector('.arrow_right');
+    var dotsContainer = document.querySelector('.dots');
 
     // Définissez une variable pour suivre l'index de la diapositive actuelle
     var currentSlideIndex = 0;
@@ -35,7 +36,36 @@ document.addEventListener('DOMContentLoaded', function () {
         // Mettez à jour l'image et le texte dans le HTML
         document.querySelector('.banner-img').src = './assets/images/slideshow/' + image;
         document.querySelector('p').innerHTML = tagLine;
+
+        // Mettez à jour les points
+        updateDots(index);
     }
+
+    // Fonction pour mettre à jour l'état des points
+    function updateDots(index) {
+        var dots = document.querySelectorAll('.dot');
+
+        // Supprimez la classe "dot_selected" de tous les points
+        dots.forEach(function (dot) {
+            dot.classList.remove('dot_selected');
+        });
+
+        // Ajoutez la classe "dot_selected" au point correspondant à la diapositive actuelle
+        dots[index].classList.add('dot_selected');
+    }
+
+    // Créez les points en fonction du nombre d'images dans le slider
+    slides.forEach(function (slide, index) {
+        var dot = document.createElement('span');
+        dot.classList.add('dot');
+        dotsContainer.appendChild(dot);
+
+        // Ajoutez un écouteur d'événements pour chaque point
+        dot.addEventListener('click', function () {
+            currentSlideIndex = index;
+            showSlide(currentSlideIndex);
+        });
+    });
 
     // Ajoutez un écouteur d'événements pour la flèche gauche
     arrowLeft.addEventListener('click', function () {
@@ -48,4 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentSlideIndex = (currentSlideIndex + 1) % slides.length;
         showSlide(currentSlideIndex);
     });
+
+    // Appellez cette fonction pour initialiser les points
+    updateDots(currentSlideIndex);
 });
